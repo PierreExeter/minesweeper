@@ -1,4 +1,5 @@
-# implements the game demineur
+#!/usr/bin/python
+""" implements the game demineur """
 
 import pygame
 from pygame.locals import *
@@ -25,7 +26,7 @@ def import_img(png_file):
 
 mine = import_img('mine.png')
 empty = import_img('empty.png')
-unit_grid = import_img('grid.png')
+boom = import_img('boom.png')
 flag = import_img('flag.png')
 hidden = import_img('hidden.png')
 one = import_img('1.png')
@@ -42,10 +43,13 @@ def create_brick(brick, x, y):
     """ place brick at location (x, y) """
     window.blit(brick, (size_cell*x, size_cell*y))
 
-# create matrix containing the number of neighbouring mines
+for x in range(1, cells_by_side-1):
+    for y in range(1, cells_by_side-1):
+        create_brick(hidden, x, y)
+
+# create matrix with random mines
 grid = np.zeros((cells_by_side+1, cells_by_side+1))
 
-# create grid with random mines
 for i in range(nb_mines):
    a = np.random.randint(1, cells_by_side-1)
    b = np.random.randint(1, cells_by_side-1)
@@ -74,10 +78,6 @@ def number_neighbours(x, y, grid):
     if grid[x+1, y-1] == 1:
         n = n+1    
     return n
-
-for x in range(1, cells_by_side-1):
-    for y in range(1, cells_by_side-1):
-        create_brick(hidden, x, y)
 
 def discover_brick(x, y):
     """ function that discover the brick at location (x, y)"""
@@ -112,19 +112,23 @@ def click_brick():
     x = 0
     y = 0
     
-    if event.type == MOUSEBUTTONDOWN:
-        if event.button == 1:
+    for i in range(1, cells_by_side-1):
+        if event.pos[0] > size_cell*i:
+            if event.pos[0] < size_cell*(i+1):
+                x = i
 
-            for i in range(1, cells_by_side-1):
-                if event.pos[0] > size_cell*i:
-                    if event.pos[0] < size_cell*(i+1):
-                        x = i
-
-            for i in range(1, cells_by_side-1):
-                if event.pos[1] > size_cell*i:
-                    if event.pos[1] < size_cell*(i+1):
-                        y = i
+    for i in range(1, cells_by_side-1):
+        if event.pos[1] > size_cell*i:
+            if event.pos[1] < size_cell*(i+1):
+                y = i
+    
     return (x, y)
+
+def place_flag(x, y):
+    """ function that places a green flag at location (x, y)"""
+    if event.type == MOUSEBUTTONDOWN:
+        if event.button == 3:
+            create_brick(flag, x, y)
 
 
 # refresh screen
@@ -141,12 +145,23 @@ while run_game:
         if event.type == KEYDOWN and event.key == K_SPACE:
             run_game = 0
 
-        x, y = click_brick()
-        discover_brick(x, y)
-        
-        # create green flag if even.button == 2 at location x, y
-        
+    if event.type == MOUSEBUTTONDOWN:
+        if event.button == 1:
+            x, y = click_brick()
+            discover_brick(x, y)
+            
+            # if you left-click on a mine...
+            if grid[x, y] == 1:
+                create_brick(boom, x, y)
 
+                for i in range(cells_by_side+1):
+                    for j in range(cells_by_side+1):
+                        if grid[i, j] == 1:
+                            create_brick(boom, i, j)
 
-    pygame.display.flip()
+        elif event.button == 3:
+            x, y = click_brick()
+            place_flag(x, y)
+        
+        pygame.display.flip()
 
