@@ -7,28 +7,6 @@ import numpy as np
 import copy
 from operator import add
 
-# initialise game
-
-# def initialise_parameter(prompt_text, min, max):
-    # """ 
-    # initialise the variable x by prompting the user with the 
-    # string prompt_text and allow only integer values between 
-    # min and max 
-    # """
-    # x = 0 
-    # while True:
-        # try:
-            # x = int(raw_input(prompt_text))
-
-        # except ValueError:
-            # print('Oops, that\'s not an integer!')
-        # else:
-            # if min <= x <= max:
-                # break
-            # else:
-                # print('Out of range. Try again')
-    # return x   
-
 while True:
     try:
         cells_by_side = int(raw_input('Enter the size of the mine field (5 - 12): ') )
