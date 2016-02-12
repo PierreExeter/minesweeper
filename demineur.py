@@ -1,5 +1,5 @@
 #!/usr/bin/python
-""" implements the game demineur """
+""" implements the game minesweeper """
 
 import pygame
 from pygame.locals import *
@@ -7,11 +7,28 @@ import numpy as np
 import copy
 from operator import add
 
+# initialise game
+
+while True:
+    try:
+        cells_by_side = int(raw_input('Enter the size of the mine field (5 - 100): ') )
+    except ValueError:
+        print('Oops, that\'s not an integer!')
+    else:
+        if 5 <= cells_by_side <= 100:
+            break
+        else:
+            print('Out of range. Try again')
+# cells_by_side = 10
+
+
+
+# nb_mines = input('Enter the number of mines (3 - 100): ')
+nb_mines = 90
+
 size_cell = 50
-cells_by_side = 10
 nb_fps = 30
 side_win = size_cell*cells_by_side
-nb_mines = 90
 
 pygame.init()
 
@@ -146,6 +163,7 @@ while run_game:
             run_game = 0
         if event.type == KEYDOWN and event.key == K_SPACE:
             run_game = 0
+    
     if event.type == MOUSEBUTTONDOWN:
         x, y = click_brick()
         print(x, y)
