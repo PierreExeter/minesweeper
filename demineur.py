@@ -9,22 +9,53 @@ from operator import add
 
 # initialise game
 
+# def initialise_parameter(prompt_text, min, max):
+    # """ 
+    # initialise the variable x by prompting the user with the 
+    # string prompt_text and allow only integer values between 
+    # min and max 
+    # """
+    # x = 0 
+    # while True:
+        # try:
+            # x = int(raw_input(prompt_text))
+
+        # except ValueError:
+            # print('Oops, that\'s not an integer!')
+        # else:
+            # if min <= x <= max:
+                # break
+            # else:
+                # print('Out of range. Try again')
+    # return x   
+
 while True:
     try:
-        cells_by_side = int(raw_input('Enter the size of the mine field (5 - 100): ') )
+        cells_by_side = int(raw_input('Enter the size of the mine field (5 - 12): ') )
     except ValueError:
         print('Oops, that\'s not an integer!')
     else:
-        if 5 <= cells_by_side <= 100:
+        if 5 <= cells_by_side <= 12:
             break
         else:
-            print('Out of range. Try again')
-# cells_by_side = 10
+            print('Out of range. Try again.')
 
+ # cells_by_side = 10
 
+while True:
+    try:
+        nb_mines = int(raw_input('Enter the number of mines (min 3): ') )
+    except ValueError:
+        print('Oops, that\'s not an integer!')
+    else:
+        if nb_mines <= 3:
+            print('Not enough mines...')
+        elif nb_mines >= cells_by_side**2-1:
+            print('Too many mines for the size of the mine field!')
+        else:
+            break
 
-# nb_mines = input('Enter the number of mines (3 - 100): ')
-nb_mines = 90
+# nb_mines = 90
 
 size_cell = 50
 nb_fps = 30
