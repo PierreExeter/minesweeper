@@ -88,41 +88,35 @@ def number_neighbours(x, y, grid):
         n = n+1    
     return n
 
-print(number_neighbours(1, 8, grid))
-
-def discover_brick(x, y):
-    """ function that discover the brick at location (x, y)"""
+def discover_brick(x, y, xx, yy):
+    """ function that discovers the brick at location (x, y)"""
     
-    # coordinate to be passed to the function create_brick
-    xx = x-1
-    yy = y-1
-
-    if grid[x, y] == 1:
+    if grid[xx, yy] == 1:
         for i in range(cells_by_side+2):
             for j in range(cells_by_side+2):
                 if grid[i, j] == 1:
                     create_brick(boom, i-1, j-1)
         print('You lost!')
 
-    if grid[x, y] == 0:
-        if number_neighbours(x, y, grid) == 0:
-            create_brick(empty, xx, yy) 
-        if number_neighbours(x, y, grid) == 1:
-            create_brick(one, xx, yy)
-        if number_neighbours(x, y, grid) == 2:
-            create_brick(two, xx, yy)
-        if number_neighbours(x, y, grid) == 3:
-            create_brick(three, xx, yy)
-        if number_neighbours(x, y, grid) == 4:
-            create_brick(four,xx , yy)
-        if number_neighbours(x, y, grid) == 5:
-            create_brick(five, xx, yy)
-        if number_neighbours(x, y, grid) == 6:
-            create_brick(six, xx, yy)
-        if number_neighbours(x, y, grid) == 7:
-            create_brick(seven, xx, yy)
-        if number_neighbours(x, y, grid) == 8:
-            create_brick(eight, xx, yy)
+    if grid[xx, yy] == 0:
+        if number_neighbours(xx, yy, grid) == 0:
+            create_brick(empty, x, y) 
+        if number_neighbours(xx, yy, grid) == 1:
+            create_brick(one, x, y)
+        if number_neighbours(xx, yy, grid) == 2:
+            create_brick(two, x, y)
+        if number_neighbours(xx, yy, grid) == 3:
+            create_brick(three, x, y)
+        if number_neighbours(xx, yy, grid) == 4:
+            create_brick(four,x , y)
+        if number_neighbours(xx, yy, grid) == 5:
+            create_brick(five, x, y)
+        if number_neighbours(xx, yy, grid) == 6:
+            create_brick(six, x, y)
+        if number_neighbours(xx, yy, grid) == 7:
+            create_brick(seven, x, y)
+        if number_neighbours(xx, yy, grid) == 8:
+            create_brick(eight, x, y)
 
 def click_brick():
     """ function that returns the brick location (x, y) of the click """ 
@@ -141,14 +135,6 @@ def click_brick():
     
     return (x, y)
 
-def place_flag(x, y):
-    """ function that places a green flag at location (x, y)"""     
-    # coordinate to be passed to the function create_brick
-    xx = x-1
-    yy = y-1
-
-    create_brick(flag, xx, yy)
-
 
 run_game = 1
 while run_game:
@@ -162,18 +148,19 @@ while run_game:
             run_game = 0
     if event.type == MOUSEBUTTONDOWN:
         x, y = click_brick()
-        # update indices to account for extra row and column
-        x = x+1
-        y = y+1
         print(x, y)
+        
+        # corresponding grid coordinates
+        xx = x+1
+        yy = y+1
 
         # # implement a counter to decide when you win
 
         if event.button == 1:
-            discover_brick(x, y)
+            discover_brick(x, y, xx, yy)
             
-        elif event.button == 3:
-            place_flag(x, y)
+        if event.button == 3:
+            create_brick(flag, x, y)
              
         pygame.display.flip()
 
